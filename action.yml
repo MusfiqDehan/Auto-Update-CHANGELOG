@@ -1,6 +1,12 @@
 # action.yml
-name: "Auto-Update-CHANGELOG"
-description: "Greet someone and record the time"
+name: auto-update-changelog
+description: Auto update your CHANGELOG on every push with previous commits
+author: Md. Musfiqur Rahaman
+
+branding:
+    icon: "refresh-cw"
+    color: "white"
+
 inputs:
     who-to-greet: # id of input
         description: "Who to greet"
