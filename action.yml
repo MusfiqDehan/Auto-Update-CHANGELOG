@@ -1,62 +1,16 @@
-name: auto-update-changelog
-description: Auto update your CHANGELOG on every push with previous commits
-author: Md. Musfiqur Rahaman
-
-branding:
-    icon: "refresh-cw"
-    color: "white"
-
+# action.yml
+name: "Hello World"
+description: "Greet someone and record the time"
 inputs:
-    name:
-        description: "The committer name"
+    who-to-greet: # id of input
+        description: "Who to greet"
         required: true
-        default: ""
-    email:
-        description: "The committer email"
-        required: true
-        default: ""
-    token:
-        description: "The GitHub token"
-        required: false
-        default: ""
-    version:
-        description: "The current version of the app"
-        required: true
-        default: ""
-
+        default: "World"
+outputs:
+    time: # id of output
+        description: "The time we greeted you"
 runs:
-    using: "composite"
-
-    steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-          with:
-              fetch-depth: 0
-
-        - run: |
-              echo "version=$(python3 setup.py --version)" >> $GITHUB_ENV
-
-              if [[ $(git log -1 --pretty=%B) != "Update CHANGELOG for v$GITHUB_APP_VERSION" ]]; then
-                  echo "Commit message does not match the release pattern."
-                  exit 1
-              fi
-
-              if [[ github.event.head_commit.message == "Update CHANGELOG for v$GITHUB_APP_VERSION" ]]; then
-                  PREVIOUS_VERSION=$(git tag -l --sort=-creatordate | head -n 1)
-                  CHANGES=$(git log --pretty="- %s (%h)" $PREVIOUS_VERSION..)
-                  echo "# v$GITHUB_APP_VERSION" >> CHANGELOG.md
-                  echo "## Changes" >> CHANGELOG.md
-                  echo "$CHANGES" >> CHANGELOG.md
-                  git config user.name "$GITHUB_NAME"
-                  git config user.email "$GITHUB_EMAIL"
-                  git commit -am "Update CHANGELOG.md with latest version by GitHub Action"
-                  git push
-                fi
-
-          shell: bash
-
-          env:
-              GITHUB_NAME: ${{inputs.name}}
-              GITHUB_EMAIL: ${{inputs.email}}
-              GITHUB_COMMITTER_TOKEN: ${{ inputs.token }}
-              GITHUB_APP_VERSION: ${{ inputs.version }}
+    using: "docker"
+    image: "Dockerfile"
+    args:
+        - ${{ inputs.who-to-greet }}
