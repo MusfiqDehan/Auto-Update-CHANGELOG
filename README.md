@@ -17,7 +17,9 @@ The time we greeted you.
 ## Example usage
 
 ```yml
-uses: MusfiqDehan/Auto-Update-CHANGELOG@v0.8.0
-with:
-    who-to-greet: "MusfiqDehan"
+-name: Auto Update CHANGELOG
+ uses: MusfiqDehan/Auto-Update-CHANGELOG@v0.8.0
+ with:
+    name: "Your GitHub Name"
+    email: "Your GitHub Email"
 ```
