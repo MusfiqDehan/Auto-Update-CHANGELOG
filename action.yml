@@ -8,15 +8,29 @@ branding:
     color: "white"
 
 inputs:
-    who-to-greet: # id of input
-        description: "Who to greet"
+    # who-to-greet: # id of input
+    #     description: "Who to greet"
+    #     required: true
+    #     default: "World"
+
+    email: # Name of the User
+        description: "Email of the User"
         required: true
-        default: "World"
-outputs:
-    time: # id of output
-        description: "The time we greeted you"
+        default: "Octocat@github.com"
+
+    name: # Name of the User
+        description: "Name of the User"
+        required: true
+        default: "Octocat"
+
+# outputs:
+#     time: # id of output
+#         description: "The time we greeted you"
+
 runs:
     using: "docker"
     image: "Dockerfile"
     args:
-        - ${{ inputs.who-to-greet }}
+        # - ${{ inputs.who-to-greet }}
+        - ${{ inputs.email }}
+        - ${{ inputs.name }}
