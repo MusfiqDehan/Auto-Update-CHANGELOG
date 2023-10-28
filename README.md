@@ -20,6 +20,6 @@ The time we greeted you.
 -name: Auto Update CHANGELOG
  uses: MusfiqDehan/Auto-Update-CHANGELOG@v0.8.0
  with:
-    name: "Your GitHub Name"
     email: "Your GitHub Email"
+    name: "Your GitHub Name"
 ```
