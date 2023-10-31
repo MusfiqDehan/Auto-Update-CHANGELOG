@@ -12,7 +12,7 @@
 
 # Get the current version
 
-echo "version=$(python setup.py --version)" >> $GITHUB_ENV
+# echo "version=$(python setup.py --version)" >> $GITHUB_ENV
 
 # Check if the commit message matches the release pattern
 
