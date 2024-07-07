@@ -10,7 +10,7 @@ inputs:
   version:
     description: 'Version number for the release.'
     required: true
-    
+
 runs:
   using: 'composite'
   steps:
@@ -24,6 +24,13 @@ runs:
       run: echo "version=$(python setup.py --version)" >> $GITHUB_ENV
       shell: bash
 
+    - name: Determine previous version
+      id: previous-version
+      run: |
+        PREVIOUS_VERSION=$(git tag --sort=-v:refname | grep -E "^v[0-9]+(\.[0-9]+)*$" | sed '1!d')
+        echo "previous_version=$PREVIOUS_VERSION" >> $GITHUB_ENV
+      shell: bash
+
     - name: Check commit message
       run: |
         if [[ $(git log -1 --pretty=%B) != "Update changelog for v${{ inputs.version }}" ]]; then
@@ -35,13 +42,11 @@ runs:
     - name: Update changelog
       if: contains(github.event.head_commit.message, 'Update changelog for v${{ inputs.version }}')
       run: |
-        PREVIOUS_VERSION=$(git tag -l --sort=-creatordate | head -n 1)
-        CHANGES=$(git log --pretty=format:"- %s (%h)" $PREVIOUS_VERSION..)
-        echo "# v${{ inputs.version }}" >> CHANGELOG.md
-        echo "## Changes" >> CHANGELOG.md
-        echo "$CHANGES" >> CHANGELOG.md
+        CHANGES=$(git log --pretty=format:"- %s (%h)" ${{ env.previous_version }}..HEAD)
+        echo -e "# v${{ inputs.version }}\n## Changes\n$CHANGES" > CHANGELOG.md
         git config user.email "your-email@example.com"
         git config user.name "Your Name"
-        git commit -am "Update CHANGELOG.md with latest version by GitHub Action"
+        git add CHANGELOG.md
+        git commit -m "Update CHANGELOG.md with latest version by GitHub Action"
         git push
       shell: bash
