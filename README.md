@@ -1,25 +1,28 @@
-# Hello World Docker Action
+# Auto Update Changelog Action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+A GitHub Action to automatically update the changelog.
 
 ## Inputs
 
-## `who-to-greet`
+- `version`: Version number for the release. (required)
 
-**Required** The name of the person to greet. Default `"World"`.
+## Example Usage
 
-## Outputs
+```yaml
+name: Update Changelog
 
-## `time`
+on:
+  push:
+    branches:
+      - master
 
-The time we greeted you.
-
-## Example usage
-
-```yml
--name: Auto Update CHANGELOG
- uses: MusfiqDehan/Auto-Update-CHANGELOG@v0.8.0
- with:
-    email: "Your GitHub Email"
-    name: "Your GitHub Name"
-```
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Update Changelog Action
+        uses: MusfiqDehan/Auto-Update-CHANGELOG@v2
+        with:
+          version: '2.0.0'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
