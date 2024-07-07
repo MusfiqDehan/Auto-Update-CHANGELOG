@@ -1,36 +1,45 @@
-# action.yml
-name: auto-update-changelog
-description: Auto update your CHANGELOG on every push with previous commits
-author: Md. Musfiqur Rahaman
+name: 'Auto Update Changelog Action'
+description: 'A GitHub Action to automatically update the changelog.'
+author: 'Md. Musfiqur Rahaman'
 
 branding:
     icon: "refresh-cw"
     color: "white"
-
+    
 inputs:
-    # who-to-greet: # id of input
-    #     description: "Who to greet"
-    #     required: true
-    #     default: "World"
-
-    email: # Name of the User
-        description: "Email of the User"
-        required: true
-        default: "Octocat@github.com"
-
-    name: # Name of the User
-        description: "Name of the User"
-        required: true
-        default: "Octocat"
-
-# outputs:
-#     time: # id of output
-#         description: "The time we greeted you"
-
+  version:
+    description: 'Version number for the release.'
+    required: true
+    
 runs:
-    using: "docker"
-    image: "Dockerfile"
-    args:
-        # - ${{ inputs.who-to-greet }}
-        - ${{ inputs.email }}
-        - ${{ inputs.name }}
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get the current version
+      id: current-version
+      run: echo "version=$(python setup.py --version)" >> $GITHUB_ENV
+
+    - name: Check commit message
+      run: |
+        if [[ $(git log -1 --pretty=%B) != "Update changelog for v${{ inputs.version }}" ]]; then
+          echo "Commit message does not match the release pattern."
+          exit 1
+        fi
+
+    - name: Update changelog
+      if: contains(github.event.head_commit.message, 'Update changelog for v${{ inputs.version }}')
+      run: |
+        PREVIOUS_VERSION=$(git tag -l --sort=-creatordate | head -n 1)
+        CHANGES=$(git log --pretty=format:"- %s (%h)" $PREVIOUS_VERSION..)
+        echo "# v${{ inputs.version }}" >> CHANGELOG.md
+        echo "## Changes" >> CHANGELOG.md
+        echo "$CHANGES" >> CHANGELOG.md
+        git config user.email "your-email@example.com"
+        git config user.name "Your Name"
+        git commit -am "Update CHANGELOG.md with latest version by GitHub Action"
+        git push
+
