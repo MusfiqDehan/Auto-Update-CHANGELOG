@@ -45,5 +45,6 @@ runs:
           echo "## Changes" >> CHANGELOG.md
           echo "$CHANGES" >> CHANGELOG.md
           git config user.email "${{ inputs.user_email }}"
+          git config user.name "${{ inputs.user_name }}"
           git commit -am "Update CHANGELOG.md with latest version by GitHub Action"
           git push
