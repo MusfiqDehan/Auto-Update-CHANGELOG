@@ -34,6 +34,8 @@ jobs:
         uses: MusfiqDehan/Auto-Update-CHANGELOG@v1.0.2
         with:
           version: ${{ env.version }}
+          user_email: 'your email'
+          user_name: 'your name'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
