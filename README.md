@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Update Changelog Action
-        uses: MusfiqDehan/Auto-Update-CHANGELOG@v2
+        uses: MusfiqDehan/Auto-Update-CHANGELOG@v1
         with:
-          version: '2.0.0'
+          version: '1.0.0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
