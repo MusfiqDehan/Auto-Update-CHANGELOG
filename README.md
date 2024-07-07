@@ -31,7 +31,7 @@ jobs:
         shell: bash
 
       - name: Run Update Changelog Action
-        uses: MusfiqDehan/Auto-Update-CHANGELOG@v1.0.0
+        uses: MusfiqDehan/Auto-Update-CHANGELOG@v1.0.2
         with:
           version: ${{ env.version }}
         env:
