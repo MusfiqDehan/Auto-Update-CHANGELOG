@@ -2,6 +2,10 @@ name: 'Update Changelog Action'
 description: 'A GitHub Action to automatically update the changelog.'
 author: 'Md. Musfiqur Rahaman'
 
+branding:
+    icon: "refresh-cw"
+    color: "white"
+
 inputs:
   version:
     description: 'Version number for the release.'
